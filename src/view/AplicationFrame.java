@@ -204,7 +204,7 @@ public class AplicationFrame extends JFrame {
 	public JComboBox secciones;
 
 	@SuppressWarnings("rawtypes")
-	private JComboBox countries;
+	public JComboBox countries;
 
 	private JTextArea resultado;
 

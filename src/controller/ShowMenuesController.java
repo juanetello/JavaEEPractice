@@ -1,13 +1,14 @@
 package controller;
 
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import model.ShowMenues;
 import view.AplicationFrame;
 
 public class ShowMenuesController extends WindowAdapter {
 
-	ShowMenues uploadSections = new ShowMenues();
+	ShowMenues showMenues = new ShowMenues();
 
 	private AplicationFrame aplicationFrame;
 
@@ -17,15 +18,21 @@ public class ShowMenuesController extends WindowAdapter {
 
 	@SuppressWarnings("unchecked")
 	public void windowOpened(WindowEvent windowEvent) {
-		uploadSections.runQuery();
-		
+		showMenues.runQuery();
+
 		try {
-			while (uploadSections.resultSet.next()) {
-				
-				aplicationFrame.secciones.addItem(uploadSections.resultSet.getString(1));
-				
+			while (showMenues.resultSet.next()) {
+
+				aplicationFrame.secciones.addItem(showMenues.resultSet.getString(1));
+
 			}
-			
+
+			while (showMenues.resultSet2.next()) {
+
+				aplicationFrame.countries.addItem(showMenues.resultSet2.getString(1));
+
+			}
+
 		} catch (Exception e) {
 			System.out.println("Have some problem with conection like... ");
 			e.printStackTrace();
