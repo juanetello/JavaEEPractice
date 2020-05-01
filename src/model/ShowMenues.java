@@ -35,6 +35,10 @@ public class ShowMenues {
 			myProducts.setOrigen(resultSet2.getString(1));
 
 			resultSet.close();
+			resultSet2.close();
+			
+			bdAccess.close();
+		
 
 		} catch (Exception e) {
 			System.out.println("Have some problem with conection like... ");

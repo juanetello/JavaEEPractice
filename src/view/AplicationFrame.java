@@ -16,10 +16,32 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import controller.RunButtonController;
 import controller.ShowMenuesController;
 
 @SuppressWarnings("serial")
 public class AplicationFrame extends JFrame {
+	
+	private Connection conection;
+
+	private PreparedStatement sendSectionQuery;
+
+	private PreparedStatement sendCountryQuery;
+
+	private PreparedStatement sendAllQuery;
+
+
+	private final String sqlCountriesToList = "SELECT CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, PAISORIGEN FROM PRODUCTOS WHERE PAISORIGEN = ?";
+
+	private final String sqlAll = "SELECT CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, PAISORIGEN FROM PRODUCTOS WHERE SECCION = ? AND PAISORIGEN = ?";
+
+	@SuppressWarnings("rawtypes")
+	public JComboBox secciones;
+
+	@SuppressWarnings("rawtypes")
+	public JComboBox countries;
+
+	public JTextArea resultado;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public AplicationFrame() {
@@ -62,19 +84,23 @@ public class AplicationFrame extends JFrame {
 
 		JButton botonConsulta = new JButton("Consulta");
 
-		botonConsulta.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				doQuery();
-
-			}
-		});
-
 		add(botonConsulta, BorderLayout.SOUTH);
 		
+		/*Ponemos el btn a escuchar... le pasamos el marco por parametro (this)*/
+		botonConsulta.addActionListener(new RunButtonController(this));
+
 		addWindowListener(new ShowMenuesController(this));
+
+//		botonConsulta.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//
+//				doQuery();
+//
+//			}
+//		});
+		
 
 		try {
 
@@ -117,95 +143,73 @@ public class AplicationFrame extends JFrame {
 
 	}
 
-	private void doQuery() {
-
-		ResultSet resultSet = null;
-
-		try {
-			
-			resultado.setText("");
-
-			String section = (String) secciones.getSelectedItem();
-
-			String country = (String) countries.getSelectedItem();
-
-			String todos = "Todos";
-
-			if (!section.equals(todos) && country.equals(todos)) {
-
-				sendSectionQuery = conection.prepareStatement(sqlSectionsToList);
-
-				sendSectionQuery.setString(1, section);
-
-				resultSet = sendSectionQuery.executeQuery();
-
-			} else if (section.equals(todos) && !country.equals(todos)) {
-
-				sendCountryQuery = conection.prepareStatement(sqlCountriesToList);
-
-				sendCountryQuery.setString(1, country);
-
-				resultSet = sendCountryQuery.executeQuery();
-
-			} else if (!section.equals(todos) && !country.equals(todos)) {
-
-				sendAllQuery = conection.prepareStatement(sqlAll);
-
-				sendAllQuery.setString(1, section);
-
-				sendAllQuery.setString(2, country);
-
-				resultSet = sendAllQuery.executeQuery();
-
-			}
-
-			while (resultSet.next()) {
-				resultado.append("Codigo: ");
-				resultado.append(resultSet.getString(1));
-
-				resultado.append(", Seccion: ");
-				resultado.append(resultSet.getString(2));
-
-				resultado.append(", Articulo: ");
-				resultado.append(resultSet.getString(3));
-
-				resultado.append(", Precio: $");
-				resultado.append(resultSet.getString(4));
-
-				resultado.append(", Origen: ");
-				resultado.append(resultSet.getString(5));
-
-				resultado.append("\n");
-
-			}
-
-		} catch (Exception e) {
-			System.out.println("Have some problem with conection like... ");
-			e.printStackTrace();
-		}
-
-	}
-
-	private Connection conection;
-
-	private PreparedStatement sendSectionQuery;
-
-	private PreparedStatement sendCountryQuery;
-
-	private PreparedStatement sendAllQuery;
-
-	private final String sqlSectionsToList = "SELECT CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, PAISORIGEN FROM PRODUCTOS WHERE SECCION = ?";
-
-	private final String sqlCountriesToList = "SELECT CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, PAISORIGEN FROM PRODUCTOS WHERE PAISORIGEN = ?";
-
-	private final String sqlAll = "SELECT CODIGOARTICULO, SECCION, NOMBREARTICULO, PRECIO, PAISORIGEN FROM PRODUCTOS WHERE SECCION = ? AND PAISORIGEN = ?";
-
-	@SuppressWarnings("rawtypes")
-	public JComboBox secciones;
-
-	@SuppressWarnings("rawtypes")
-	public JComboBox countries;
-
-	private JTextArea resultado;
+//	private void doQuery() {
+//
+//		ResultSet resultSet = null;
+//
+//		try {
+//			
+//			resultado.setText("");
+//
+//			String section = (String) secciones.getSelectedItem();
+//
+//			String country = (String) countries.getSelectedItem();
+//
+//			String todos = "Todos";
+//
+//			if (!section.equals(todos) && country.equals(todos)) {
+//
+//				sendSectionQuery = conection.prepareStatement(sqlSectionsToList);
+//
+//				sendSectionQuery.setString(1, section);
+//
+//				resultSet = sendSectionQuery.executeQuery();
+//
+//			} else if (section.equals(todos) && !country.equals(todos)) {
+//
+//				sendCountryQuery = conection.prepareStatement(sqlCountriesToList);
+//
+//				sendCountryQuery.setString(1, country);
+//
+//				resultSet = sendCountryQuery.executeQuery();
+//
+//			} else if (!section.equals(todos) && !country.equals(todos)) {
+//
+//				sendAllQuery = conection.prepareStatement(sqlAll);
+//
+//				sendAllQuery.setString(1, section);
+//
+//				sendAllQuery.setString(2, country);
+//
+//				resultSet = sendAllQuery.executeQuery();
+//
+//			}
+//
+//			while (resultSet.next()) {
+//				resultado.append("Codigo: ");
+//				resultado.append(resultSet.getString(1));
+//
+//				resultado.append(", Seccion: ");
+//				resultado.append(resultSet.getString(2));
+//
+//				resultado.append(", Articulo: ");
+//				resultado.append(resultSet.getString(3));
+//
+//				resultado.append(", Precio: $");
+//				resultado.append(resultSet.getString(4));
+//
+//				resultado.append(", Origen: ");
+//				resultado.append(resultSet.getString(5));
+//
+//				resultado.append("\n");
+//
+//			}
+//
+//		} catch (Exception e) {
+//			System.out.println("Have some problem with conection like... ");
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 }

@@ -5,10 +5,9 @@ import java.sql.DriverManager;
 
 public class ConnectionDataBase {
 
-	Connection connection = null;
+	Connection myConnection = null;
 
 	public ConnectionDataBase() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Connection giveMeConection() {
@@ -18,14 +17,14 @@ public class ConnectionDataBase {
 			String username = "pizza";
 			String password = "pizza";
 
-			connection = DriverManager.getConnection(url, username, password);
+			myConnection = DriverManager.getConnection(url, username, password);
 
 		} catch (Exception e) {
 			System.out.println("Have some problem with conection like... ");
 			e.printStackTrace();
 		}
 
-		return connection;
+		return myConnection;
 	}
 
 }
